@@ -43,7 +43,7 @@ const menDiv = document.getElementById('men');
 const womenDiv = document.getElementById('women');
 
 if (hotDiv) {
-  fetch('http://localhost:3000/products')
+  fetch('https://raw.githubusercontent.com/nguyenduong15032006-cell/kudoshinichi/refs/heads/main/db.json?token=GHSAT0AAAAAADM5V3FSBA6TS3NXPOMQRU5G2HSAUOQ')
     .then(response => response.json())
     .then(data => {
       console.log(data);
@@ -144,7 +144,7 @@ if (productDetailDiv) {
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
 
-  fetch(`http://localhost:3000/products/${id}`)
+    fetch(`https://raw.githubusercontent.com/nguyenduong15032006-cell/kudoshinichi/refs/heads/main/db.json?token=GHSAT0AAAAAADM5V3FSBA6TS3NXPOMQRU5G2HSAUOQ/${id}`)
     .then(response => response.json())
     .then(data => {
       console.log(data);
@@ -299,7 +299,7 @@ function updateCartCount() {
 document.addEventListener("click", (e) => {
   if (e.target && e.target.id === "addCartBtn") {
     const id = e.target.getAttribute("productId");
-    fetch(`http://localhost:3000/products/${id}`)
+    fetch(`https://raw.githubusercontent.com/nguyenduong15032006-cell/kudoshinichi/refs/heads/main/db.json?token=GHSAT0AAAAAADM5V3FSBA6TS3NXPOMQRU5G2HSAUOQ/${id}`)
       .then(res => res.json())
       .then(data => {
         const cart = getCart();
@@ -334,7 +334,7 @@ async function renderCart() {
     // Use cache if available
     let productsList = window.PRODUCT_CACHE.list;
     if (!Array.isArray(productsList)) {
-      const res = await fetch('http://localhost:3000/products');
+      const res = await fetch('https://raw.githubusercontent.com/nguyenduong15032006-cell/kudoshinichi/refs/heads/main/db.json?token=GHSAT0AAAAAADM5V3FSBA6TS3NXPOMQRU5G2HSAUOQ');
       productsList = await res.json();
       // hydrate cache
       window.PRODUCT_CACHE.list = productsList;
@@ -511,7 +511,7 @@ function openProductModal(id) {
   if (!id) return; // add new
 
   // edit: load data
-  fetch(`http://localhost:3000/products/${id}`)
+  fetch(`https://raw.githubusercontent.com/nguyenduong15032006-cell/kudoshinichi/refs/heads/main/db.json?token=GHSAT0AAAAAADM5V3FSBA6TS3NXPOMQRU5G2HSAUOQ/${id}`)
     .then(res => res.json())
     .then(p => {
       fillProductForm(p);
@@ -554,14 +554,14 @@ async function saveProductFromForm() {
 
   try {
     if (id) {
-      await fetch(`http://localhost:3000/products/${id}`, {
+      await fetch(`https://raw.githubusercontent.com/nguyenduong15032006-cell/kudoshinichi/refs/heads/main/db.json?token=GHSAT0AAAAAADM5V3FSBA6TS3NXPOMQRU5G2HSAUOQ/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: Number(id), ...payload })
       });
       alert('Đã cập nhật sản phẩm.');
     } else {
-      await fetch('http://localhost:3000/products', {
+      await fetch('https://raw.githubusercontent.com/nguyenduong15032006-cell/kudoshinichi/refs/heads/main/db.json?token=GHSAT0AAAAAADM5V3FSBA6TS3NXPOMQRU5G2HSAUOQ', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -587,7 +587,7 @@ async function saveProductFromForm() {
 async function deleteProduct(id) {
   if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
   try {
-    await fetch(`http://localhost:3000/products/${id}`, { method: 'DELETE' });
+    await fetch(`https://raw.githubusercontent.com/nguyenduong15032006-cell/kudoshinichi/refs/heads/main/db.json?token=GHSAT0AAAAAADM5V3FSBA6TS3NXPOMQRU5G2HSAUOQ/${id}`, { method: 'DELETE' });
     // invalidate cache after delete
     window.PRODUCT_CACHE = { list: null, map: null, ts: 0 };
     if (typeof loadAllProducts === 'function') {
@@ -606,7 +606,7 @@ async function loadAllProducts() {
   try {
     // Use and refresh cache
     if (!Array.isArray(window.PRODUCT_CACHE.list)) {
-      const response = await fetch('http://localhost:3000/products');
+      const response = await fetch('https://raw.githubusercontent.com/nguyenduong15032006-cell/kudoshinichi/refs/heads/main/db.json?token=GHSAT0AAAAAADM5V3FSBA6TS3NXPOMQRU5G2HSAUOQ');
       const data = await response.json();
       window.PRODUCT_CACHE.list = data;
       window.PRODUCT_CACHE.map = new Map(data.map(p => [p.id, p]));
@@ -626,7 +626,7 @@ window.loadAdminTable = async function loadAdminTable() {
   const count = document.getElementById('admin-count');
   if (!tbody) return;
   try {
-    const res = await fetch('http://localhost:3000/products');
+    const res = await fetch('https://raw.githubusercontent.com/nguyenduong15032006-cell/kudoshinichi/refs/heads/main/db.json?token=GHSAT0AAAAAADM5V3FSBA6TS3NXPOMQRU5G2HSAUOQ');
     const data = await res.json();
     if (count) count.textContent = `Tổng: ${data.length} sản phẩm`;
     if (!Array.isArray(data) || data.length === 0) {
