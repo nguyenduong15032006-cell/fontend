@@ -1,0 +1,126 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Iphone 14",
+      "price": 20000000,
+      "image": "img/iphone.jpg",
+      "category": "điện thoại",
+      "hot": true,
+      "description": "iPhone 14 sở hữu thiết kế sang trọng, hiệu năng mạnh mẽ với chip A15 Bionic, camera sắc nét và hỗ trợ quay phim chất lượng cao."
+    },
+    {
+      "id": "2",
+      "name": "Samsung S23",
+      "price": 18000000,
+      "image": "img/samsung.jpg",
+      "category": "điện thoại",
+      "hot": false,
+      "description": "Samsung Galaxy S23 mang lại trải nghiệm đỉnh cao với màn hình AMOLED 120Hz, camera chuyên nghiệp và pin bền bỉ cả ngày."
+    },
+    {
+      "id": "3",
+      "name": "Xiaomi 13",
+      "price": 15000000,
+      "image": "img/goku.webp",
+      "category": "điện thoại",
+      "hot": true,
+      "description": "Xiaomi 13 gây ấn tượng với hiệu năng mạnh mẽ từ Snapdragon 8 Gen 2, camera Leica chất lượng và sạc siêu nhanh 120W."
+    },
+    {
+      "id": "4",
+      "name": "Vivo X30",
+      "price": 7000000,
+      "image": "img/vivo.jpg",
+      "category": "điện thoại",
+      "hot": false,
+      "description": "Vivo X30 sở hữu thiết kế mỏng nhẹ, camera tele chụp xa ấn tượng và hiệu năng ổn định cho nhu cầu hằng ngày."
+    },
+    {
+      "id": "5",
+      "name": "Macbook Pro 2023",
+      "price": 55000000,
+      "image": "img/anh anh do.jpg",
+      "category": "laptop",
+      "hot": true,
+      "description": "MacBook Pro 2023 trang bị chip M2 Pro mạnh mẽ, màn hình Liquid Retina XDR siêu nét và thời lượng pin lên đến 20 giờ."
+    },
+    {
+      "id": "6",
+      "name": "Dell XPS 13",
+      "price": 35000000,
+      "image": "img/dell.jpg",
+      "category": "laptop",
+      "hot": false,
+      "description": "Dell XPS 13 nổi bật với khung nhôm nguyên khối, màn hình InfinityEdge sắc nét và hiệu năng mạnh mẽ cho dân văn phòng."
+    },
+    {
+      "id": "7",
+      "name": "Asus Zenbook",
+      "price": 25000000,
+      "image": "img/asus.jpg",
+      "category": "laptop",
+      "hot": true,
+      "description": "Asus Zenbook mang đến sự cân bằng giữa hiệu suất và tính di động, cùng thiết kế tinh tế và bàn phím êm ái."
+    },
+    {
+      "id": "8",
+      "name": "HP Envy",
+      "price": 20000000,
+      "image": "img/hp.jpg",
+      "category": "laptop",
+      "hot": false,
+      "description": "HP Envy được trang bị màn hình viền mỏng, chip Intel Core thế hệ mới và thời lượng pin ấn tượng cho công việc cả ngày."
+    },
+    {
+      "id": "9",
+      "name": "Pokemon",
+      "price": 25000000,
+      "image": "img/anh pikachu1.jpg",
+      "category": "điện thoại",
+      "hot": false,
+      "description": "Phiên bản đặc biệt lấy cảm hứng từ Pokémon, thiết kế đáng yêu, cấu hình mạnh và pin cực bền – phù hợp cho mọi fan Pikachu."
+    },
+    {
+      "id": "10",
+      "name": "Yasuo",
+      "price": 30000000,
+      "image": "img/Anh yasuo.jpg",
+      "category": "laptop",
+      "hot": true,
+      "description": "Laptop Yasuo phiên bản gaming, hiệu năng chiến game cực đỉnh, tản nhiệt tối ưu và thiết kế hầm hố như chính phong cách của Yasuo."
+    },
+    {
+      "id": "195e",
+      "name": "Lợi Thái Dúi",
+      "price": 121321,
+      "image": "https://th.bing.com/th/id/OIP.3zWVyd7Qhb6IdeMbWG7gUQHaF4?w=227&h=181&c=7&r=0&o=7&cb=12&dpr=1.3&pid=1.7&rm=3",
+      "category": "điện thoại",
+      "hot": true,
+      "description": "quá đẹp"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "123456",
+      "email": "admin@example.com",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "username": "duong",
+      "password": "123456",
+      "email": "duong@example.com",
+      "role": "user"
+    },
+    {
+      "id": "3",
+      "username": "ngoc",
+      "password": "123456",
+      "email": "ngoc@example.com",
+      "role": "user"
+    }
+  ]
+}
