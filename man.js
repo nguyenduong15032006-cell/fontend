@@ -1,49 +1,29 @@
-// ==================== CẤU HÌNH API TƯƠNG THÍCH LOCAL / GITHUB ====================
+// ==================== CẤU HÌNH API LOCAL / GITHUB ====================
+const IS_REMOTE = location.hostname.endsWith("github.io") || location.hostname.endsWith("vercel.app");
 
-// Nếu chạy trên GitHub Pages hoặc Vercel (domain chứa github.io hoặc vercel.app)
-const IS_REMOTE = location.hostname.endsWith('github.io') || location.hostname.endsWith('vercel.app');
-
-// Link dữ liệu JSON (raw file trên GitHub public)
 const PRODUCTS_URL = IS_REMOTE
-  ? 'https://raw.githubusercontent.com/nguyenduong15032006-cell/db.json/main/db.json'  // URL raw từ GitHub Repo
-  : 'http://localhost:3000/products'; // Dành cho khi bạn chạy JSON Server local
+  ? "https://raw.githubusercontent.com/nguyenduong15032006-cell/db.json/main/db.json"
+  : "http://localhost:3000/products"; // khi chạy JSON Server local
 
 // ==================== HELPER: TẢI DANH SÁCH SẢN PHẨM ====================
 function fetchProducts() {
   return fetch(PRODUCTS_URL)
-    .then(res => {
-      if (!res.ok) throw new Error('Không thể tải danh sách sản phẩm');
+    .then((res) => {
+      if (!res.ok) throw new Error("Không thể tải danh sách sản phẩm");
       return res.json();
     })
-    .then(data => {
-      // Trường hợp GitHub: file có dạng { "products": [ ... ] }
-      if (data.products) return data.products;
-      // Trường hợp JSON Server local: trả về mảng luôn
-      return data;
-    })
-    .catch(err => {
-      console.error('Lỗi tải sản phẩm:', err);
+    .then((data) => (data.products ? data.products : data))
+    .catch((err) => {
+      console.error("Lỗi tải sản phẩm:", err);
       return [];
     });
 }
 
 // ==================== HELPER: LẤY 1 SẢN PHẨM THEO ID ====================
 function fetchProductById(id) {
-  if (IS_REMOTE) {
-    // Khi chạy online (GitHub/Vercel): chỉ có thể tải toàn bộ file rồi lọc ra
-    return fetchProducts().then(products => products.find(p => String(p.id) === String(id)));
-  } else {
-    // Khi chạy local với JSON Server (localhost:3000/products/:id)
-    return fetch(`http://localhost:3000/products/${id}`)
-      .then(res => {
-        if (!res.ok) throw new Error('Không tìm thấy sản phẩm');
-        return res.json();
-      })
-      .catch(err => {
-        console.error('Lỗi tải sản phẩm theo ID:', err);
-        return null;
-      });
-  }
+  return fetchProducts().then((products) =>
+    products.find((p) => String(p.id) === String(id))
+  );
 }
 
 // ==================== class sản phẩm ====================
@@ -60,7 +40,7 @@ class Product {
 
   render() {
     return `
-      <div class="product${this.hot ? ' hot' : ''}">
+      <div class="product${this.hot ? " hot" : ""}">
         <img src="${this.image}" alt="${this.name}">
         <a href="detail.html?id=${this.id}">
           <h3>${this.name}</h3>
@@ -85,50 +65,60 @@ class Product {
   }
 }
 
-// ==================== Show trang chủ ====================
-const hotDiv = document.getElementById('hot');
-const menDiv = document.getElementById('men');
-const womenDiv = document.getElementById('women');
+// ==================== Hiển thị TRANG CHỦ ====================
+const hotDiv = document.getElementById("hot");
+const menDiv = document.getElementById("men");
+const womenDiv = document.getElementById("women");
 
 if (hotDiv) {
-  fetch('https://raw.githubusercontent.com/nguyenduong15032006-cell/db.json/main/db.json')
-    .then(response => response.json())
-    .then(data => {
-      const dataHot = data.products.filter(p => p.hot === true);
-      const dataPhone = data.products.filter(p => p.category === "điện thoại");
-      const dataLaptop = data.products.filter(p => p.category === "laptop");
-      renderProduct(dataHot, hotDiv);
-      renderProduct(dataPhone, menDiv);
-      renderProduct(dataLaptop, womenDiv);
-    })
-    .catch(error => {
-      console.error('Lỗi khi tải dữ liệu sản phẩm:', error);
-      hotDiv.innerHTML = '<p>Không thể tải dữ liệu sản phẩm</p>';
-    });
+  fetchProducts().then((data) => {
+    const dataHot = data.filter((p) => p.hot === true);
+    const dataPhone = data.filter((p) => p.category === "điện thoại");
+    const dataLaptop = data.filter((p) => p.category === "laptop");
+    renderProduct(dataHot, hotDiv);
+    renderProduct(dataPhone, menDiv);
+    renderProduct(dataLaptop, womenDiv);
+  });
 }
 
-// ==================== Show trang sản phẩm ====================
-const productAll = document.getElementById('all-product');
-const searchInput = document.getElementById('search-input');
-const sortPrice = document.getElementById('sort-price');
-let allProductsData = [];
-
-// ==================== Perf utils ====================
-function debounce(fn, delay) {
-  let timer = null;
-  return function (...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), delay);
-  };
+// ==================== Hiển thị TẤT CẢ SẢN PHẨM ====================
+const productAll = document.getElementById("all-product");
+if (productAll) {
+  fetchProducts().then((data) => renderProduct(data, productAll));
 }
 
+// ==================== Hiển thị CHI TIẾT SẢN PHẨM ====================
+const productDetailDiv = document.getElementById("detail-product");
+if (productDetailDiv) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get("id");
+
+  fetchProductById(id).then((product) => {
+    if (product) {
+      const p = new Product(
+        product.id,
+        product.name,
+        product.price,
+        product.image,
+        product.category,
+        product.hot,
+        product.description
+      );
+      productDetailDiv.innerHTML = p.renderDetail();
+    } else {
+      productDetailDiv.innerHTML = "<p>Không tìm thấy sản phẩm!</p>";
+    }
+  });
+}
+
+// ==================== UTILITIES ====================
 function formatCurrency(value) {
   const num = Number(value) || 0;
   return `${num.toLocaleString()} đ`;
 }
 
-// ==================== Render sản phẩm ====================
 function renderProduct(array, theDiv) {
+  if (!theDiv) return;
   let html = "";
   array.forEach((data) => {
     const product = new Product(
@@ -145,38 +135,7 @@ function renderProduct(array, theDiv) {
   theDiv.innerHTML = html;
 }
 
-// ==================== Trang chi tiết sản phẩm ====================
-const productDetailDiv = document.getElementById('detail-product');
-if (productDetailDiv) {
-  const urlParams = new URLSearchParams(window.location.search);
-  const id = urlParams.get('id');
-
-  fetch('https://raw.githubusercontent.com/nguyenduong15032006-cell/db.json/main/db.json')
-    .then(response => response.json())
-    .then(data => {
-      const product = data.products.find(p => p.id == id);
-      if (product) {
-        const p = new Product(
-          product.id,
-          product.name,
-          product.price,
-          product.image,
-          product.category,
-          product.hot,
-          product.description
-        );
-        productDetailDiv.innerHTML = p.renderDetail();
-      } else {
-        productDetailDiv.innerHTML = '<p>Không tìm thấy sản phẩm!</p>';
-      }
-    })
-    .catch(error => {
-      console.error('Lỗi khi tải chi tiết sản phẩm:', error);
-      productDetailDiv.innerHTML = '<p>Không thể tải thông tin sản phẩm</p>';
-    });
-}
-
-// ==================== Giỏ hàng cơ bản ====================
+// ==================== GIỎ HÀNG ====================
 function getCart() {
   return JSON.parse(localStorage.getItem("cart")) || [];
 }
@@ -193,31 +152,26 @@ function updateCartCount() {
   if (badge) badge.textContent = totalQty;
 }
 
-// ==================== Thêm vào giỏ hàng ====================
+// ==================== XỬ LÝ "THÊM VÀO GIỎ HÀNG" ====================
 document.addEventListener("click", (e) => {
   if (e.target && e.target.id === "addCartBtn") {
     const id = e.target.getAttribute("productId");
 
-    fetch('https://raw.githubusercontent.com/nguyenduong15032006-cell/db.json/main/db.json')
-      .then(res => res.json())
-      .then(data => {
-        const product = data.products.find(p => p.id == id);
-        if (!product) return alert("Không tìm thấy sản phẩm!");
-        const cart = getCart();
-        const item = cart.find(i => i.id == product.id);
-        if (item) item.quantity++;
-        else cart.push({ id: product.id, quantity: 1 });
-        saveCart(cart);
-        alert(`✅ Đã thêm "${product.name}" vào giỏ hàng!`);
-      })
-      .catch(error => {
-        console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
-        alert('❌ Có lỗi xảy ra khi thêm sản phẩm!');
-      });
+    fetchProductById(id).then((product) => {
+      if (!product) return alert("Không tìm thấy sản phẩm!");
+
+      const cart = getCart();
+      const item = cart.find((i) => i.id == product.id);
+      if (item) item.quantity++;
+      else cart.push({ id: product.id, quantity: 1 });
+
+      saveCart(cart);
+      alert(`✅ Đã thêm "${product.name}" vào giỏ hàng!`);
+    });
   }
 });
 
-// ==================== Load khi vào trang ====================
+// ==================== KHI TRANG LOAD ====================
 document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
 });
