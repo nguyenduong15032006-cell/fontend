@@ -1,3 +1,51 @@
+// ==================== CẤU HÌNH API TƯƠNG THÍCH LOCAL / GITHUB ====================
+
+// Nếu chạy trên GitHub Pages hoặc Vercel (domain chứa github.io hoặc vercel.app)
+const IS_REMOTE = location.hostname.endsWith('github.io') || location.hostname.endsWith('vercel.app');
+
+// Link dữ liệu JSON (raw file trên GitHub public)
+const PRODUCTS_URL = IS_REMOTE
+  ? 'https://raw.githubusercontent.com/nguyenduong15032006-cell/db.json/main/db.json'  // URL raw từ GitHub Repo
+  : 'http://localhost:3000/products'; // Dành cho khi bạn chạy JSON Server local
+
+// ==================== HELPER: TẢI DANH SÁCH SẢN PHẨM ====================
+function fetchProducts() {
+  return fetch(PRODUCTS_URL)
+    .then(res => {
+      if (!res.ok) throw new Error('Không thể tải danh sách sản phẩm');
+      return res.json();
+    })
+    .then(data => {
+      // Trường hợp GitHub: file có dạng { "products": [ ... ] }
+      if (data.products) return data.products;
+      // Trường hợp JSON Server local: trả về mảng luôn
+      return data;
+    })
+    .catch(err => {
+      console.error('Lỗi tải sản phẩm:', err);
+      return [];
+    });
+}
+
+// ==================== HELPER: LẤY 1 SẢN PHẨM THEO ID ====================
+function fetchProductById(id) {
+  if (IS_REMOTE) {
+    // Khi chạy online (GitHub/Vercel): chỉ có thể tải toàn bộ file rồi lọc ra
+    return fetchProducts().then(products => products.find(p => String(p.id) === String(id)));
+  } else {
+    // Khi chạy local với JSON Server (localhost:3000/products/:id)
+    return fetch(`http://localhost:3000/products/${id}`)
+      .then(res => {
+        if (!res.ok) throw new Error('Không tìm thấy sản phẩm');
+        return res.json();
+      })
+      .catch(err => {
+        console.error('Lỗi tải sản phẩm theo ID:', err);
+        return null;
+      });
+  }
+}
+
 // ==================== class sản phẩm ====================
 class Product {
   constructor(id, name, price, image, category, hot, description) {
